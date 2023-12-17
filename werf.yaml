@@ -1,0 +1,6 @@
+project: veverse-api
+configVersion: 1
+
+---
+image: api
+dockerfile: Dockerfile

@@ -1,0 +1,231 @@
+# app deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      imagePullSecrets:
+        - name: registrysecret
+      containers:
+        - name: api
+          image: {{ .Values.werf.image.api }}
+          ports:
+            - name: http-app
+              containerPort: 3000
+#          readinessProbe:
+#            httpGet:
+#              path: /v2/health/check?key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+#              port: 3000
+#          livenessProbe:
+#            tcpSocket:
+#              port: 3000
+#            initialDelaySeconds: 30
+          env:
+            - name: ENVIRONMENT
+              value: {{ .Values.global.env | default "dev" }}
+            - name: PRIVATE_KEY
+              value: {{ .Values.global.private_key }}
+            - name: PUBLIC_KEY
+              value: {{ .Values.global.public_key }}
+            - name: DATABASE_HOST
+              value: "{{ pluck .Values.global.env .Values.app.db.host | first | default .Values.app.db.host._default }}"
+            - name: DATABASE_PORT
+              value: "{{ pluck .Values.global.env .Values.app.db.port | first | default .Values.app.db.port._default }}"
+            - name: DATABASE_NAME
+              value: "{{ pluck .Values.global.env .Values.app.db.name | first | default .Values.app.db.name._default }}"
+            - name: DATABASE_USER
+              value: "{{ pluck .Values.global.env .Values.app.db.user | first | default .Values.app.db.user._default }}"
+            - name: DATABASE_PASS
+              value: "{{ pluck .Values.global.env .Values.app.db.pass | first | default .Values.app.db.pass._default }}"
+            - name: CLICKHOUSE_HOST
+              value: "{{ pluck .Values.global.env .Values.app.clickhouse.host | first | default .Values.app.clickhouse.host._default }}"
+            - name: CLICKHOUSE_PORT
+              value: "{{ pluck .Values.global.env .Values.app.clickhouse.port | first | default .Values.app.clickhouse.port._default }}"
+            - name: CLICKHOUSE_NAME
+              value: "{{ pluck .Values.global.env .Values.app.clickhouse.name | first | default .Values.app.clickhouse.name._default }}"
+            - name: CLICKHOUSE_USER
+              value: "{{ pluck .Values.global.env .Values.app.clickhouse.user | first | default .Values.app.clickhouse.user._default }}"
+            - name: CLICKHOUSE_PASS
+              value: "{{ pluck .Values.global.env .Values.app.clickhouse.pass | first | default .Values.app.clickhouse.pass._default }}"
+            - name: AUTH_SECRET
+              value: "{{ pluck .Values.global.env .Values.app.auth.secret | first | default .Values.app.auth.secret._default }}"
+            - name: AUTH_EXPIRATION
+              value: "{{ pluck .Values.global.env .Values.app.auth.expiration | first | default .Values.app.auth.expiration._default }}"
+            - name: AWS_DEFAULT_OUTPUT
+              value: "{{ pluck .Values.global.env .Values.app.aws.defaultOutput | first | default .Values.app.aws.defaultOutput._default }}"
+            - name: AWS_S3_BUCKET
+              value: "{{ pluck .Values.global.env .Values.app.aws.s3.bucket | first | default .Values.app.aws.s3.bucket._default }}"
+            - name: AWS_S3_REGION
+              value: "{{ pluck .Values.global.env .Values.app.aws.s3.region | first | default .Values.app.aws.s3.region._default }}"
+            - name: AWS_SES_REGION
+              value: "{{ pluck .Values.global.env .Values.app.aws.ses.region | first | default .Values.app.aws.ses.region._default }}"
+            - name: AWS_SES_BOUNCE_ADDRESS
+              value: "{{ pluck .Values.global.env .Values.app.aws.ses.bounce | first | default .Values.app.aws.ses.bounce._default }}"
+            - name: AWS_SES_SENDER_ADDRESS
+              value: "{{ pluck .Values.global.env .Values.app.aws.ses.sender | first | default .Values.app.aws.ses.sender._default }}"
+            - name: AWS_ACCESS_KEY
+              value: "{{ pluck .Values.global.env .Values.app.aws.accessKeyId | first | default .Values.app.aws.accessKeyId._default }}"
+            - name: AWS_SECRET_KEY
+              value: "{{ pluck .Values.global.env .Values.app.aws.accessSecretKey | first | default .Values.app.aws.accessSecretKey._default }}"
+            - name: STRIPE_API_SECRET_KEY
+              value: "{{ pluck .Values.global.env .Values.app.api.stripe_secret_key | first | default .Values.app.api.stripe_secret_key._default }}"
+            - name: STRIPE_EVENT_PAYMENT_WEBHOOK_SECRET
+              value: "{{ pluck .Values.global.env .Values.app.stripe.webhook_secret.event_payment | first | default .Values.app.stripe.webhook_secret.event_payment._default }}"
+            - name: WEBAPP_ADDRESS
+              value: "{{ pluck .Values.global.env .Values.app.common.webapp_address | first | default .Values.app.common.webapp_address._default }}"
+            - name: API_ADDRESS
+              value: "{{ pluck .Values.global.env .Values.app.api.address | first | default .Values.app.api.address._default }}"
+            - name: OPENSEA_API_KEY
+              value: "{{ pluck .Values.global.env .Values.app.api.opensea_api_key | first | default .Values.app.api.opensea_api_key._default }}"
+            - name: DEFAULT_CHAIN_ID
+              value: "{{ pluck .Values.global.env .Values.app.common.web3.default_chain_id | first | default .Values.app.common.web3.default_chain_id._default }}"
+            - name: VE_SERVICE_SECRET
+              value: "{{ pluck .Values.global.env .Values.app.api.service_secret | first | default .Values.app.api.service_secret._default }}"
+            - name: PUBLIC_PROTECTION_KEY
+              value: "{{ pluck .Values.global.env .Values.app.api.public_protection_key | first | default .Values.app.api.public_protection_key._default }}"
+            - name: DISCORD_HOOK_URL
+              value: "{{ pluck .Values.global.env .Values.app.discord.hook_url | first | default .Values.app.discord.hook_url._default }}"
+            - name: ACTIVATION_SECRET_KEY
+              value: "{{ pluck .Values.global.env .Values.app.api.activation_secret_key | first | default .Values.app.api.activation_secret_key._default }}"
+            - name: ACTIVATION_SECURITY_PASSWORD_SALT
+              value: "{{ pluck .Values.global.env .Values.app.api.activation_security_password_salt | first | default .Values.app.api.activation_security_password_salt._default }}"
+            - name: GAMESERVER_API_V1_TOKEN
+              value: "{{ pluck .Values.global.env .Values.app.api.gameserver_api_v1_token | first | default .Values.app.api.gameserver_api_v1_token._default }}"
+            - name: GAMESERVER_API_V2_EMAIL
+              value: "{{ pluck .Values.global.env .Values.app.api.gameserver_api_v2_email | first | default .Values.app.api.gameserver_api_v2_email._default }}"
+            - name: GAMESERVER_API_V2_PASS
+              value: "{{ pluck .Values.global.env .Values.app.api.gameserver_api_v2_pass | first | default .Values.app.api.gameserver_api_v2_pass._default }}"
+            - name: OAUTH_GOOGLE_ID
+              value: "{{ pluck .Values.global.env .Values.app.oauth.google.id | first | default .Values.app.oauth.google.id._default }}"
+            - name: OAUTH_GOOGLE_SECRET
+              value: "{{ pluck .Values.global.env .Values.app.oauth.google.secret | first | default .Values.app.oauth.google.secret._default }}"
+            - name: OAUTH_LE7EL_ID
+              value: "{{ pluck .Values.global.env .Values.app.oauth.le7el.id | first | default .Values.app.oauth.le7el.id._default }}"
+            - name: OAUTH_LE7EL_SECRET
+              value: "{{ pluck .Values.global.env .Values.app.oauth.le7el.secret | first | default .Values.app.oauth.le7el.secret._default }}"
+            - name: OPENAI_API_KEY
+              value: "{{ pluck .Values.global.env .Values.app.openai.api.key | first | default .Values.app.openai.api.key._default }}"
+            - name: ELEVENLABS_API_KEY
+              value: "{{ pluck .Values.global.env .Values.app.elevenlabs.api.key | first | default .Values.app.elevenlabs.api.key._default }}"
+
+# Cluster IP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  selector:
+    app: {{ .Chart.Name }}
+  clusterIP: None
+  ports:
+    - name: http-app
+      port: 3000
+    - name: http
+      port: 80
+  type: ClusterIP
+
+# Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+#    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "3000m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+  name: {{ .Chart.Name }}
+spec:
+  rules:
+    - host: {{ .Values.global.ci_url }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ .Chart.Name }}
+                port:
+                  name: http-app
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - {{ .Values.global.ci_url }}
+      secretName: ingress-tls
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      return 403;
+  name: hide-well-known
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ .Values.global.ci_url }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ .Chart.Name }}
+                port:
+                  name: http-app
+            path: /.well-known
+            pathType: Prefix
+  tls:
+    - hosts:
+        - {{ .Values.global.ci_url }}
+      secretName: ingress-tls
+
+# Pod autoscaling
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    name: {{ .Chart.Name }}
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: {{ .Chart.Name }}
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: backend
+        minAllowed:
+          memory: "100Mi"
+          cpu: "1"
+        maxAllowed:
+          memory: "4Gi"
+          cpu: "8"
+        mode: Auto
+
+# HTTPS certificate manager disabled as we have problems with UE websocket SSL
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  dnsNames:
+    - {{ .Values.global.ci_url }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: ingress-tls
+

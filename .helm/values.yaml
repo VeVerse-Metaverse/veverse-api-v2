@@ -1,0 +1,165 @@
+app:
+  api:
+    command: .
+    private_key:
+      _default: -----BEGIN OPENSSH PRIVATE KEY-----
+        xxx
+        -----END OPENSSH PRIVATE KEY-----
+    public_key:
+      _default: "ssh-rsa xxx builder@example.com"
+    stripe_secret_key:
+      _default: ""
+      dev: ""
+      test: ""
+      prod: ""
+    opensea_api_key:
+      _default: ""
+      dev: ""
+      test: ""
+      prod: ""
+    address:
+      _default: "https://api.example.com/v2"
+      dev: "https://dev.api.example.com/v2"
+      test: "https://test.api.example.com/v2"
+      prod: "https://api.example.com/v2"
+    service_secret:
+      _default: ""
+    activation_secret_key:
+      _default: ""
+    activation_security_password_salt:
+      _default: ""
+    public_protection_key:
+      _default: ""
+    gameserver_api_v1_token:
+      _default: ""
+    gameserver_api_v2_email:
+      _default: "gameserver@example.com"
+    gameserver_api_v2_pass:
+      _default: "XXXXXXXXXXXX"
+  discord:
+    hook_url:
+      _default: "https://discord.com/api/webhooks/XXXXXXXXXXXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  db:
+    host:
+      _default: "localhost"
+      dev: "db.example.com"
+      test: "db.example.com"
+      prod: "db.example.com"
+    port:
+      _default: "5432"
+      dev: "5432"
+      test: "5432"
+      prod: "5432"
+    user:
+      _default: "postgres"
+      dev: "dev"
+      test: "test"
+      prod: "prod"
+    name:
+      _default: "veverse"
+      dev: "dev"
+      test: "test"
+      prod: "prod"
+    pass:
+      _default: "postgres"
+      dev: "password"
+      test: "password"
+      prod: "password"
+  clickhouse:
+    host:
+      _default: "localhost"
+      dev: "db.example.com"
+      test: "db.example.com"
+      prod: "db.example.com"
+    port:
+      _default: "9000"
+      dev: "9000"
+      test: "9000"
+      prod: "9000"
+    user:
+      _default: "default"
+    pass:
+      _default: "password"
+    name:
+      _default: "default"
+      dev: "veverse-dev"
+      test: "veverse-test"
+      prod: "veverse-prod"
+  auth:
+    expiration:
+      _default: "72"
+      dev: "720"
+    secret:
+      _default: ""
+  aws:
+    accessKeyId:
+      _default: ""
+    accessSecretKey:
+      _default: ""
+    defaultOutput:
+      _default: "json"
+    s3:
+      region:
+        _default: "us-west-1"
+      bucket:
+        _default: ""
+        dev: "veverse-dev"
+        test: "veverse-test"
+        prod: "veverse-public"
+    ses:
+      region:
+        _default: "us-west-1"
+      bounce:
+        _default: "no-reply@le7el.com"
+      sender:
+        _default: "no-reply@le7el.com"
+  stripe:
+    webhook_secret:
+      event_payment:
+        _default: ""
+        dev: ""
+        test: ""
+        prod: ""
+  common:
+    webapp_address:
+      _default: "https://web.veverse.com"
+      dev: "https://dev.web.veverse.com"
+      test: "https://test.web.veverse.com"
+      prod: "https://web.veverse.com"
+    web3:
+      default_chain_id:
+        _default: "0x4"
+        dev: "0x4"
+        test: "0x4"
+        prod: "0x137"
+  oauth:
+    google:
+      id:
+        _default: ""
+      secret:
+        _default: ""
+    le7el:
+      id:
+        _default: "veverse-client"
+        other: "veverse-client-test"
+      secret:
+        _default: ""
+        other: ""
+    eos:
+      id:
+        _default: ""
+      secret:
+        _default: ""
+    discord:
+      id:
+        _default: ""
+      secret:
+        _default: ""
+  openai:
+    api:
+      key:
+        _default: ""
+  elevenlabs:
+    api:
+      key:
+        _default: ""

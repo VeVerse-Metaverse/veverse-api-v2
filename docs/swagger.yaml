@@ -1,0 +1,1380 @@
+basePath: /v2/
+definitions:
+  handler.LoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handler.LoginWeb3Input:
+    properties:
+      address:
+        type: string
+      message:
+        type: string
+      signature:
+        type: string
+      timestamp:
+        type: integer
+    type: object
+  handler.SignupRequestMetadata:
+    properties:
+      agreedToTerms:
+        type: boolean
+      area:
+        type: string
+      company:
+        type: string
+      email:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      requestedSdk:
+        type: boolean
+      socialUrl:
+        type: string
+      type:
+        type: string
+      websiteUrl:
+        type: string
+    type: object
+  handler.SwaggerUserBatch:
+    properties:
+      entities:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+      limit:
+        type: integer
+      offset:
+        type: integer
+      total:
+        type: integer
+    type: object
+  model.Accessible:
+    properties:
+      canDelete:
+        type: boolean
+      canEdit:
+        type: boolean
+      canView:
+        type: boolean
+      createdAt:
+        type: string
+      entityId:
+        type: string
+      id:
+        type: string
+      isOwner:
+        type: boolean
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/model.User'
+    type: object
+  model.Comment:
+    properties:
+      entityId:
+        type: string
+      id:
+        type: string
+      text:
+        type: string
+      userId:
+        type: string
+    type: object
+  model.Entity:
+    properties:
+      accessibles:
+        items:
+          $ref: '#/definitions/model.Accessible'
+        type: array
+      comments:
+        items:
+          $ref: '#/definitions/model.Comment'
+        type: array
+      createdAt:
+        type: string
+      entityType:
+        type: string
+      files:
+        items:
+          $ref: '#/definitions/model.File'
+        type: array
+      id:
+        type: string
+      likables:
+        items:
+          $ref: '#/definitions/model.Likable'
+        type: array
+      links:
+        items:
+          $ref: '#/definitions/model.Link'
+        type: array
+      owner:
+        $ref: '#/definitions/model.User'
+      properties:
+        items:
+          $ref: '#/definitions/model.Property'
+        type: array
+      public:
+        type: boolean
+      updatedAt:
+        type: string
+      views:
+        type: integer
+    type: object
+  model.EntityAccessRequest:
+    properties:
+      canDelete:
+        type: boolean
+      canEdit:
+        type: boolean
+      canView:
+        type: boolean
+      public:
+        type: boolean
+      userId:
+        type: string
+    required:
+    - userId
+    type: object
+  model.ErrorResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  model.File:
+    properties:
+      createdAt:
+        type: string
+      deploymentType:
+        description: server or client if applicable
+        type: string
+      entityId:
+        type: string
+      hash:
+        type: string
+      height:
+        type: integer
+      id:
+        type: string
+      mime:
+        type: string
+      originalPath:
+        description: original relative path to maintain directory structure (e.g.
+          for releases)
+        type: string
+      platform:
+        description: platform if applicable
+        type: string
+      size:
+        type: integer
+      type:
+        type: string
+      updatedAt:
+        type: string
+      uploadedBy:
+        description: user that uploaded the file
+        type: string
+      url:
+        type: string
+      variation:
+        description: variant of the file if applicable (e.g. PDF pages)
+        type: integer
+      version:
+        description: version of the file if versioned
+        type: integer
+      width:
+        type: integer
+    type: object
+  model.Likable:
+    properties:
+      createdAt:
+        type: string
+      entityId:
+        type: string
+      id:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        description: User who liked or disliked the Entity
+        type: string
+      value:
+        description: 1 for likes, -1 for dislikes
+        type: integer
+    type: object
+  model.Link:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  model.Package:
+    properties:
+      accessibles:
+        items:
+          $ref: '#/definitions/model.Accessible'
+        type: array
+      comments:
+        items:
+          $ref: '#/definitions/model.Comment'
+        type: array
+      createdAt:
+        type: string
+      description:
+        type: string
+      downloads:
+        type: integer
+      entityType:
+        type: string
+      files:
+        items:
+          $ref: '#/definitions/model.File'
+        type: array
+      id:
+        type: string
+      likables:
+        items:
+          $ref: '#/definitions/model.Likable'
+        type: array
+      liked:
+        type: integer
+      links:
+        items:
+          $ref: '#/definitions/model.Link'
+        type: array
+      map:
+        type: string
+      name:
+        type: string
+      owner:
+        $ref: '#/definitions/model.User'
+      price:
+        type: number
+      properties:
+        items:
+          $ref: '#/definitions/model.Property'
+        type: array
+      public:
+        type: boolean
+      release:
+        type: string
+      releasedAt:
+        type: string
+      summary:
+        type: string
+      title:
+        type: string
+      totalDislikes:
+        type: integer
+      totalLikes:
+        type: integer
+      updatedAt:
+        type: string
+      version:
+        type: string
+      views:
+        type: integer
+    type: object
+  model.Persona:
+    properties:
+      accessibles:
+        items:
+          $ref: '#/definitions/model.Accessible'
+        type: array
+      comments:
+        items:
+          $ref: '#/definitions/model.Comment'
+        type: array
+      configuration: {}
+      createdAt:
+        type: string
+      entityType:
+        type: string
+      files:
+        items:
+          $ref: '#/definitions/model.File'
+        type: array
+      id:
+        type: string
+      likables:
+        items:
+          $ref: '#/definitions/model.Likable'
+        type: array
+      links:
+        items:
+          $ref: '#/definitions/model.Link'
+        type: array
+      name:
+        type: string
+      owner:
+        $ref: '#/definitions/model.User'
+      properties:
+        items:
+          $ref: '#/definitions/model.Property'
+        type: array
+      public:
+        type: boolean
+      type:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+      views:
+        type: integer
+    type: object
+  model.Portal:
+    properties:
+      accessibles:
+        items:
+          $ref: '#/definitions/model.Accessible'
+        type: array
+      comments:
+        items:
+          $ref: '#/definitions/model.Comment'
+        type: array
+      createdAt:
+        type: string
+      destination:
+        $ref: '#/definitions/model.Portal'
+      entityType:
+        type: string
+      files:
+        items:
+          $ref: '#/definitions/model.File'
+        type: array
+      id:
+        type: string
+      likables:
+        items:
+          $ref: '#/definitions/model.Likable'
+        type: array
+      links:
+        items:
+          $ref: '#/definitions/model.Link'
+        type: array
+      name:
+        type: string
+      owner:
+        $ref: '#/definitions/model.User'
+      properties:
+        items:
+          $ref: '#/definitions/model.Property'
+        type: array
+      public:
+        type: boolean
+      space:
+        $ref: '#/definitions/model.World'
+      updatedAt:
+        type: string
+      views:
+        type: integer
+    type: object
+  model.Presence:
+    properties:
+      serverId:
+        type: string
+      spaceId:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.Property:
+    properties:
+      entityId:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+      value:
+        type: string
+    type: object
+  model.User:
+    properties:
+      accessibles:
+        items:
+          $ref: '#/definitions/model.Accessible'
+        type: array
+      activatedAt:
+        type: string
+      address:
+        type: string
+      allowEmails:
+        type: boolean
+      apiKey:
+        type: string
+      comments:
+        items:
+          $ref: '#/definitions/model.Comment'
+        type: array
+      createdAt:
+        type: string
+      defaultPersona:
+        $ref: '#/definitions/model.Persona'
+      description:
+        type: string
+      email:
+        type: string
+      entityType:
+        type: string
+      ethAddress:
+        type: string
+      experience:
+        type: integer
+      files:
+        items:
+          $ref: '#/definitions/model.File'
+        type: array
+      id:
+        type: string
+      isActive:
+        type: boolean
+      isAdmin:
+        type: boolean
+      isBanned:
+        type: boolean
+      isInternal:
+        type: boolean
+      isMuted:
+        type: boolean
+      lastSeenAt:
+        type: string
+      level:
+        type: integer
+      likables:
+        items:
+          $ref: '#/definitions/model.Likable'
+        type: array
+      links:
+        items:
+          $ref: '#/definitions/model.Link'
+        type: array
+      name:
+        type: string
+      owner:
+        $ref: '#/definitions/model.User'
+      presence:
+        $ref: '#/definitions/model.Presence'
+      properties:
+        items:
+          $ref: '#/definitions/model.Property'
+        type: array
+      public:
+        type: boolean
+      rank:
+        type: string
+      updatedAt:
+        type: string
+      views:
+        type: integer
+    type: object
+  model.World:
+    properties:
+      accessibles:
+        items:
+          $ref: '#/definitions/model.Accessible'
+        type: array
+      comments:
+        items:
+          $ref: '#/definitions/model.Comment'
+        type: array
+      createdAt:
+        type: string
+      description:
+        type: string
+      entityType:
+        type: string
+      files:
+        items:
+          $ref: '#/definitions/model.File'
+        type: array
+      gameMode:
+        type: string
+      id:
+        type: string
+      likables:
+        items:
+          $ref: '#/definitions/model.Likable'
+        type: array
+      liked:
+        type: integer
+      links:
+        items:
+          $ref: '#/definitions/model.Link'
+        type: array
+      map:
+        type: string
+      metaverse:
+        $ref: '#/definitions/model.Package'
+      name:
+        type: string
+      owner:
+        $ref: '#/definitions/model.User'
+      properties:
+        items:
+          $ref: '#/definitions/model.Property'
+        type: array
+      public:
+        type: boolean
+      totalDislikes:
+        type: integer
+      totalLikes:
+        type: integer
+      type:
+        type: string
+      updatedAt:
+        type: string
+      views:
+        type: integer
+    type: object
+info:
+  contact:
+    email: support@le7el.com
+    name: Support
+  description: LE7EL API swagger
+  termsOfService: http://swagger.io/terms/
+  title: LE7EL API
+  version: 1.0.0
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login using email and password.
+      parameters:
+      - description: Request JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Login
+      tags:
+      - accounts
+  /auth/login/web3:
+    post:
+      consumes:
+      - application/json
+      description: Login using web3.
+      parameters:
+      - description: Request JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginWeb3Input'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: LoginWeb3
+      tags:
+      - accounts
+  /entity/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete entity
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete entity
+      tags:
+      - Entity
+    get:
+      consumes:
+      - application/json
+      description: Get entity
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get entity
+      tags:
+      - Entity
+  /entity/{id}/access:
+    get:
+      consumes:
+      - application/json
+      description: Get entity access
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get entity access
+      tags:
+      - Entity
+    put:
+      consumes:
+      - application/json
+      description: Update entity access
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Entity access request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.EntityAccessRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update entity access
+      tags:
+      - Entity
+  /entity/{id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: Get comments
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get comments
+      tags:
+      - Entity
+  /entity/{id}/dislike:
+    post:
+      consumes:
+      - application/json
+      description: Dislike entity
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Dislike entity
+      tags:
+      - Entity
+  /entity/{id}/like:
+    post:
+      consumes:
+      - application/json
+      description: Like entity
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Like entity
+      tags:
+      - Entity
+  /entity/{id}/properties:
+    get:
+      consumes:
+      - application/json
+      description: Get properties
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get properties
+      tags:
+      - Entity
+  /entity/{id}/ratings:
+    get:
+      consumes:
+      - application/json
+      description: Get ratings
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get ratings
+      tags:
+      - Entity
+  /entity/{id}/tags:
+    get:
+      consumes:
+      - application/json
+      description: Get tags
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get tags
+      tags:
+      - Entity
+  /entity/{id}/unlike:
+    post:
+      consumes:
+      - application/json
+      description: Unlike entity
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Unlike entity
+      tags:
+      - Entity
+  /entity/{id}/view:
+    post:
+      consumes:
+      - application/json
+      description: Increment entity view
+      parameters:
+      - description: Entity ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Entity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Increment entity view
+      tags:
+      - Entity
+  /placeable_classes:
+    get:
+      consumes:
+      - application/json
+      description: Fetch object classes in batches
+      parameters:
+      - description: Specify to filter by category
+        in: query
+        name: category
+        type: string
+      - description: Specify to filter by the portal, destination portal, destination
+          space or destination metaverse name
+        in: query
+        name: query
+        type: string
+      - description: Pagination offset, default 0
+        in: query
+        name: offset
+        type: integer
+      - description: Pagination limit, default 100
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Portal'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Index Object Classes
+      tags:
+      - objects
+  /portals:
+    get:
+      consumes:
+      - application/json
+      description: Fetch portal in batches
+      parameters:
+      - description: Specify to filter by the owning space ID
+        in: query
+        name: spaceId
+        type: string
+      - description: Specify to attach the pak file
+        in: query
+        name: platform
+        type: string
+      - description: Specify to attach the pak file
+        in: query
+        name: deployment
+        type: string
+      - description: Specify to filter by the portal, destination portal, destination
+          space or destination metaverse name
+        in: query
+        name: query
+        type: string
+      - description: Pagination offset, default 0
+        in: query
+        name: offset
+        type: integer
+      - description: Pagination limit, default 100
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Portal'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Index Portals
+      tags:
+      - portals
+  /portals/:id:
+    get:
+      consumes:
+      - application/json
+      description: Fetch a single portal
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        type: string
+      - description: Specify to attach the pak file
+        in: query
+        name: platform
+        type: string
+      - description: Specify to attach the pak file
+        in: query
+        name: deployment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Portal'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get Portal
+      tags:
+      - portals
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Signup user for the mailing list
+      parameters:
+      - description: Request JSON
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SignupRequestMetadata'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Signup
+      tags:
+      - signup
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Indexing users with optional search query
+      parameters:
+      - description: Query
+        in: query
+        name: query
+        type: string
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SwaggerUserBatch'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: User pagination
+      tags:
+      - users
+  /worlds/:id:
+    get:
+      consumes:
+      - application/json
+      description: Fetch a single world
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        type: string
+      - description: Specify to attach the pak file
+        in: query
+        name: platform
+        type: string
+      - description: Specify to attach the pak file
+        in: query
+        name: deployment
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.World'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      security:
+      - Bearer: []
+      summary: Get World
+      tags:
+      - worlds
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,65 @@
+variables:
+  WERF_VERSION: 1.2 stable
+
+stages:
+  - deploy
+
+# Base deployment
+.deploy:
+  stage: deploy
+  script:
+    - source ~/.bashrc
+    - echo $PATH
+    - type multiwerf && source $(multiwerf use ${WERF_VERSION} --as-file)
+    - type werf && source $(werf ci-env gitlab --as-file)
+    - werf converge
+      --namespace ${CI_NAMESPACE}
+      --set "global.ci_url=$(cut -d / -f 3 <<< $CI_ENVIRONMENT_URL)"
+  tags:
+    - werf
+
+# Dev deployment
+Deploy to Dev:
+  extends: .deploy
+  environment:
+    name: dev
+    url: https://dev.api2.veverse.com
+  variables:
+    CI_NAMESPACE: veverse-api-dev
+    ENVIRONMENT: dev
+    LOG_LEVEL: debug
+  only:
+    - branches
+  tags:
+    - aws
+
+# Production deployment, deploy only release tags
+Deploy to Test:
+  extends: .deploy
+  environment:
+    name: test
+    url: https://test.api2.veverse.com
+  variables:
+    CI_NAMESPACE: veverse-api-test
+    ENVIRONMENT: test
+    LOG_LEVEL: info
+  only:
+    - branches
+  when: manual
+  tags:
+    - aws
+
+# Production deployment, deploy only release tags
+Deploy to Production:
+  extends: .deploy
+  environment:
+    name: prod
+    url: https://api2.veverse.com
+  variables:
+    CI_NAMESPACE: veverse-api-prod
+    ENVIRONMENT: prod
+  only:
+    - tags
+  when: manual
+  tags:
+    - aws

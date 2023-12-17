@@ -1,0 +1,149 @@
+It appears that YouTrack is warning about not using non-anonymous volumes for its data, configuration, logs, and backups. To address this, you need to modify the `.helm/templates/10-app.yaml` file to include Persistent Volume Claims (PVCs) for these directories and mount them to the appropriate paths within the YouTrack container.
+
+1. Add Persistent Volume Claims to the `.helm/templates/10-app.yaml` file:
+
+Add the following PVCs after the existing `youtrack-data-claim` PVC:
+
+```yaml
+# Persistent Volume Claim for configuration
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: youtrack-conf-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+# Persistent Volume Claim for logs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: youtrack-logs-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+# Persistent Volume Claim for backups
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: youtrack-backups-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+```
+
+2. Update the Deployment section in the `.helm/templates/10-app.yaml` file:
+
+Modify the `containers` section to include volume mounts for the new PVCs:
+
+```yaml
+containers:
+  - name: youtrack
+    image: {{ .Values.werf.image.youtrack }}
+    env:
+      - name: DATABASE_URL
+        value: {{ .Values.youtrack.db.url }}
+      - name: DATABASE_USER
+        value: {{ .Values.youtrack.db.user }}
+      - name: DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Chart.Name }}-db-secret
+            key: password
+    ports:
+      - containerPort: 8080
+    volumeMounts:
+      - name: youtrack-data
+        mountPath: /opt/youtrack/data
+      - name: youtrack-conf
+        mountPath: /opt/youtrack/conf
+      - name: youtrack-logs
+        mountPath: /opt/youtrack/logs
+      - name: youtrack-backups
+        mountPath: /opt/youtrack/backups
+```
+
+3. Update the `spec` section of the Deployment to include the new volumes:
+
+```yaml
+spec:
+  imagePullSecrets:
+    - name: registrysecret
+  containers:
+    - name: youtrack
+      # ... (rest of the container settings)
+  volumes:
+    - name: youtrack-data
+      persistentVolumeClaim:
+        claimName: youtrack-data-claim
+    - name: youtrack-conf
+      persistentVolumeClaim:
+        claimName: youtrack-conf-claim
+    - name: youtrack-logs
+      persistentVolumeClaim:
+        claimName: youtrack-logs-claim
+    - name: youtrack-backups
+      persistentVolumeClaim:
+        claimName: youtrack-backups-claim
+```
+
+After making these changes, commit and push them to the GitLab repository. The GitLab CI/CD pipeline should now deploy JetBrains YouTrack to your AWS K8s cluster managed by Deckhouse and built with werf.io with the proper volume mounts for data, configuration, logs, and backups.
+
+
+
+I apologize for the inconvenience. The issue might be caused by incorrect permissions or other issues with the mounted volumes. To debug the issue, please follow these steps:
+
+1. Check the logs of the YouTrack container:
+
+Run the following command to get the logs of the YouTrack container:
+
+```bash
+kubectl logs -n <namespace> <youtrack-pod-name> youtrack
+```
+
+Replace `<namespace>` with the namespace where the YouTrack application is deployed, and `<youtrack-pod-name>` with the name of the YouTrack pod.
+
+2. Check the logs of the init container:
+
+Run the following command to get the logs of the init container:
+
+```bash
+kubectl logs -n <namespace> <youtrack-pod-name> -c volume-permissions
+```
+
+Replace `<namespace>` and `<youtrack-pod-name>` as mentioned earlier.
+
+3. Inspect the YouTrack pod:
+
+Run the following command to describe the YouTrack pod:
+
+```bash
+kubectl describe pod -n <namespace> <youtrack-pod-name>
+```
+
+Replace `<namespace>` and `<youtrack-pod-name>` as mentioned earlier.
+
+4. Check the status of the Persistent Volume Claims (PVCs):
+
+Run the following command to check the status of the PVCs:
+
+```bash
+kubectl get pvc -n <namespace>
+```
+
+Replace `<namespace>` with the namespace where the YouTrack application is deployed.
+
+Please provide the output of these commands to help identify the issue causing the container to crash.
